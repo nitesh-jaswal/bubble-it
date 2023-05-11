@@ -1,2 +1,2 @@
-# bubble-it
+# Bubble It
 A smart way to interact with people
