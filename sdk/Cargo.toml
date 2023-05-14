@@ -1,5 +1,5 @@
 [package]
-name = "makepad-app"
+name = "bubble-it-coresdk"
 version = "0.1.0"
 edition = "2021"
 
