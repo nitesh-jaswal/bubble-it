@@ -62,7 +62,7 @@ impl Bubble {
         }
     }
     
-    // pub fn new_message_received(&str)
+
     fn add_bubblett(&mut self, bubblett: Bubblett) -> Result<(), String> {
         if !self.members.contains(&bubblett.sender) {
             return Err("ERROR: Member cannot participate in the bubble".to_string())
