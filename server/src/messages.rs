@@ -149,17 +149,13 @@ impl Message {
     ) -> Result<Vec<Message>, sqlx::Error> {
         match sqlx::query!("SELECT * FROM messages WHERE (sender_id = $1 AND receiver_id = $2) OR (sender_id = $2 AND receiver_id = $1) ORDER BY sent_at ASC", user1, user2).fetch_all(db).await {
             Ok(rows) => Ok(rows.iter().filter_map(|row| {
-                if let Some(id) = row.id {
-                    Some(Message::new(
+                row.id.map(|id| Message::new(
                         id,
                         row.sender_id,
                         row.receiver_id,
                         &row.message_text,
                         row.sent_at.unwrap(),
                     ))
-                } else {
-                    None
-                }
             }).collect()),
             Err(e) => Err(e),
         }
