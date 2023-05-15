@@ -1,11 +1,7 @@
-use std::net::SocketAddr;
-
 use axum::{routing::get, Extension, Router};
+use server::routes;
 use sqlx::SqlitePool;
-
-mod messages;
-mod routes;
-mod users;
+use std::net::SocketAddr;
 
 #[tokio::main]
 async fn main() -> Result<(), sqlx::Error> {

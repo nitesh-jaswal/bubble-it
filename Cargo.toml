@@ -1,9 +1,7 @@
 [workspace]
+exclude = [ "server" ]
 
-members = [
-    "sdk",
-		"server"
-]
+members = [ "sdk" ]
 
 [profile.release]
 #lto=true
