@@ -87,7 +87,7 @@ pub mod message {
         Json(body): Json<RequestBody>,
     ) -> Result<(), StatusCode> {
         Message::create(&pool, sender_id, receiver_id, &body.message)
-                .await
-                .map_err(|_| StatusCode::NOT_FOUND)
+            .await
+            .map_err(|_| StatusCode::NOT_FOUND)
     }
 }
