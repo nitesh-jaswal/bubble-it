@@ -1,7 +1,8 @@
 [workspace]
 
 members = [
-    "sdk"
+    "sdk",
+		"server"
 ]
 
 [profile.release]
