@@ -7,12 +7,9 @@
 }
 
 :root{
-    --green:#0071bb;
-    --green2:#0071bb;
-    --grey:#b2bec3; 
-    --blue:#02bfe7;
-    --blue2:#02bfe7;
-    
+     --grey:#b2bec3; 
+    --colour:#0071bb;
+    --colour2:#0071bb;
 }
 
 .jsOff{
@@ -44,7 +41,7 @@
    flex-direction:column;
    font-size:1.6em;
    letter-spacing:3px;
-   color:var(--green2);
+   color:var(--colour2);
 }
 #loader div img{
     width:100px;
@@ -60,7 +57,7 @@
     color:var(--grey);
 }
 #loader .by span:nth-child(2){
-    color:var(--blue2);
+    color:var(--colour2);
     font-size:1.6em;
     letter-spacing:4px;
 }
@@ -76,7 +73,7 @@
     justify-content:space-between;
     align-items:center;
     font-size:1.3em;
-    background:var(--green2);
+    background:var(--colour2);
     color:#fff;
 }
 .n1 .tab{
@@ -117,7 +114,7 @@
     width:100%;
     height:100%;
     background:#fff;
-    color:var(--blue2);
+    color:var(--colour2);
     clip-path:circle(0% at 50% 50%);
     transition:clip-path 0.5s ease-out;
     display:flex;
@@ -145,7 +142,7 @@
     position:sticky;
     top:0;
     color:#fff;
-    background:var(--green);
+    background:var(--colour);
     transition:transform 0.7s linear;
     display:flex;
     justify-content:space-evenly;
@@ -236,7 +233,7 @@ section .chat .avatar img{
     right:25px;
     font-size:1.7em;
     padding:15px;
-    background:var(--green2);
+    background:var(--colour2);
     color:#fff;
     border-radius:50%;
 }
@@ -253,10 +250,10 @@ section .chat .Coffin .message span:nth-child(2){
     justify-content:center;
     align-items:center;
     color:#fff;
-    background:var(--green2);
+    background:var(--colour2);
     border-radius:50%;
 }
 section .chat .Coffin .info span:nth-child(2){
-    color:var(--green2);
+    color:var(--colour2);
     font-weight:bold;
 }
