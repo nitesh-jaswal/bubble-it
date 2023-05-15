@@ -87,7 +87,7 @@ onload=()=>{
     }
     $(".container")[user.length-1].style.border="none";
     $(".message")[user.length-1].style=`
-    color:var(--green);
+    color:var(--colour2);
     font-weight:border;
     `;
     
