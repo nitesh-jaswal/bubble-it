@@ -16,62 +16,48 @@ impl User {
     }
 
     pub async fn create(db: &SqlitePool, name: &str) -> Result<(), sqlx::Error> {
-        match sqlx::query!("INSERT INTO users (name) VALUES (?)", name)
+        sqlx::query!("INSERT INTO users (name) VALUES (?)", name)
             .execute(db)
             .await
-        {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
+            .map(|_| ())
     }
 
     pub async fn get_by_id(db: &SqlitePool, id: i64) -> Result<User, sqlx::Error> {
-        let row = sqlx::query!("SELECT * FROM users WHERE id = ?", id)
+        sqlx::query!("SELECT * FROM users WHERE id = ?", id)
             .fetch_one(db)
-            .await;
-        match row {
-            Ok(row) => Ok(User::new(row.id, &row.name)),
-            Err(e) => Err(e),
-        }
+            .await
+            .map(|row| User::new(row.id, &row.name))
     }
 
     pub async fn get_by_name(db: &SqlitePool, name: &str) -> Result<User, sqlx::Error> {
-        let row = sqlx::query!("SELECT * FROM users WHERE name = ?", name)
+        sqlx::query!("SELECT * FROM users WHERE name = ?", name)
             .fetch_one(db)
-            .await;
-        match row {
-            Ok(row) => Ok(User::new(row.id, &row.name)),
-            Err(e) => Err(e),
-        }
+            .await
+            .map(|row| User::new(row.id, &row.name))
     }
 
     pub async fn get_all(db: &SqlitePool) -> Result<Vec<User>, sqlx::Error> {
-        match sqlx::query!("SELECT * FROM users").fetch_all(db).await {
-            Ok(rows) => Ok(rows
-                .iter()
-                .map(|row| User::new(row.id, &row.name))
-                .collect()),
-            Err(e) => Err(e),
-        }
+        sqlx::query!("SELECT * FROM users")
+            .fetch_all(db)
+            .await
+            .map(|rows| {
+                rows.iter()
+                    .map(|row| User::new(row.id, &row.name))
+                    .collect()
+            })
     }
 
     pub async fn delete(db: &SqlitePool, id: i64) -> Result<(), sqlx::Error> {
-        match sqlx::query!("DELETE FROM users WHERE id = ?", id)
+        sqlx::query!("DELETE FROM users WHERE id = ?", id)
             .execute(db)
             .await
-        {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
+            .map(|_| ())
     }
 
     pub async fn update(db: &SqlitePool, id: i64, name: &str) -> Result<(), sqlx::Error> {
-        match sqlx::query!("UPDATE users SET name = ? WHERE id = ?", name, id)
+        sqlx::query!("UPDATE users SET name = ? WHERE id = ?", name, id)
             .execute(db)
             .await
-        {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
+            .map(|_| ())
     }
 }

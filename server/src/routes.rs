@@ -34,9 +34,9 @@ pub mod user {
         Extension(pool): Extension<SqlitePool>,
         Json(body): Json<RequestBody>,
     ) -> Result<(), StatusCode> {
-        Ok(User::create(&pool, &body.name)
+        User::create(&pool, &body.name)
             .await
-            .map_err(|_| StatusCode::NOT_FOUND)?)
+            .map_err(|_| StatusCode::NOT_FOUND)
     }
 
     pub async fn update(
@@ -44,18 +44,18 @@ pub mod user {
         Path(id): Path<i64>,
         Json(body): Json<RequestBody>,
     ) -> Result<(), StatusCode> {
-        Ok(User::update(&pool, id, &body.name)
+        User::update(&pool, id, &body.name)
             .await
-            .map_err(|_| StatusCode::NOT_FOUND)?)
+            .map_err(|_| StatusCode::NOT_FOUND)
     }
 
     pub async fn delete(
         Extension(pool): Extension<SqlitePool>,
         Path(id): Path<i64>,
     ) -> Result<(), StatusCode> {
-        Ok(User::delete(&pool, id)
+        User::delete(&pool, id)
             .await
-            .map_err(|_| StatusCode::NOT_FOUND)?)
+            .map_err(|_| StatusCode::NOT_FOUND)
     }
 }
 
@@ -86,10 +86,8 @@ pub mod message {
         Extension(pool): Extension<SqlitePool>,
         Json(body): Json<RequestBody>,
     ) -> Result<(), StatusCode> {
-        Ok(
-            Message::create(&pool, sender_id, receiver_id, &body.message)
-                .await
-                .map_err(|_| StatusCode::NOT_FOUND)?,
-        )
+        Message::create(&pool, sender_id, receiver_id, &body.message)
+            .await
+            .map_err(|_| StatusCode::NOT_FOUND)
     }
 }
