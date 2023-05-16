@@ -33,7 +33,7 @@ impl Message {
         receiver_id: i64,
         message_text: &str,
     ) -> Result<(), sqlx::Error> {
-        match sqlx::query!(
+        sqlx::query!(
             "INSERT INTO messages (sender_id, receiver_id, message_text) VALUES (?, ?, ?)",
             sender_id,
             receiver_id,
@@ -41,76 +41,70 @@ impl Message {
         )
         .execute(db)
         .await
-        {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
+        .map(|_| ())
     }
 
     pub async fn get_all(db: &SqlitePool) -> Result<Vec<Message>, sqlx::Error> {
-        match sqlx::query!("SELECT * FROM messages").fetch_all(db).await {
-            Ok(rows) => Ok(rows
-                .iter()
-                .map(|row| {
-                    Message::new(
-                        row.id,
-                        row.sender_id,
-                        row.receiver_id,
-                        &row.message_text,
-                        row.sent_at.unwrap(),
-                    )
-                })
-                .collect()),
-            Err(e) => Err(e),
-        }
+        sqlx::query!("SELECT * FROM messages")
+            .fetch_all(db)
+            .await
+            .map(|rows| {
+                rows.iter()
+                    .map(|row| {
+                        Message::new(
+                            row.id,
+                            row.sender_id,
+                            row.receiver_id,
+                            &row.message_text,
+                            row.sent_at.unwrap(),
+                        )
+                    })
+                    .collect()
+            })
     }
 
     pub async fn find_by_sender_id(
         db: &SqlitePool,
         sender_id: i64,
     ) -> Result<Vec<Message>, sqlx::Error> {
-        match sqlx::query!("SELECT * FROM messages WHERE sender_id = ?", sender_id)
+        sqlx::query!("SELECT * FROM messages WHERE sender_id = ?", sender_id)
             .fetch_all(db)
             .await
-        {
-            Ok(rows) => Ok(rows
-                .iter()
-                .map(|row| {
-                    Message::new(
-                        row.id,
-                        row.sender_id,
-                        row.receiver_id,
-                        &row.message_text,
-                        row.sent_at.unwrap(),
-                    )
-                })
-                .collect()),
-            Err(e) => Err(e),
-        }
+            .map(|rows| {
+                rows.iter()
+                    .map(|row| {
+                        Message::new(
+                            row.id,
+                            row.sender_id,
+                            row.receiver_id,
+                            &row.message_text,
+                            row.sent_at.unwrap(),
+                        )
+                    })
+                    .collect()
+            })
     }
 
     pub async fn find_by_receiver_id(
         db: &SqlitePool,
         receiver_id: i64,
     ) -> Result<Vec<Message>, sqlx::Error> {
-        match sqlx::query!("SELECT * FROM messages WHERE receiver_id = ?", receiver_id)
+        sqlx::query!("SELECT * FROM messages WHERE receiver_id = ?", receiver_id)
             .fetch_all(db)
             .await
-        {
-            Ok(rows) => Ok(rows
-                .iter()
-                .map(|row| {
-                    Message::new(
-                        row.id,
-                        row.sender_id,
-                        row.receiver_id,
-                        &row.message_text,
-                        row.sent_at.unwrap(),
-                    )
-                })
-                .collect()),
-            Err(e) => Err(e),
-        }
+            .map(|rows| {
+                rows.iter()
+                    .map(|row| {
+                        Message::new(
+                            row.id,
+                            row.sender_id,
+                            row.receiver_id,
+                            &row.message_text,
+                            row.sent_at.unwrap(),
+                        )
+                    })
+                    .collect()
+            })
     }
 
     pub async fn find_from_sender_id_to_receiver_id(
@@ -118,16 +112,15 @@ impl Message {
         sender_id: i64,
         receiver_id: i64,
     ) -> Result<Vec<Message>, sqlx::Error> {
-        match sqlx::query!(
+        sqlx::query!(
             "SELECT * FROM messages WHERE sender_id = ? AND receiver_id = ?",
             sender_id,
             receiver_id
         )
         .fetch_all(db)
         .await
-        {
-            Ok(rows) => Ok(rows
-                .iter()
+        .map(|rows| {
+            rows.iter()
                 .map(|row| {
                     Message::new(
                         row.id,
@@ -137,9 +130,8 @@ impl Message {
                         row.sent_at.unwrap(),
                     )
                 })
-                .collect()),
-            Err(e) => Err(e),
-        }
+                .collect()
+        })
     }
 
     pub async fn chat_history(
@@ -147,18 +139,21 @@ impl Message {
         user1: i64,
         user2: i64,
     ) -> Result<Vec<Message>, sqlx::Error> {
-        match sqlx::query!("SELECT * FROM messages WHERE (sender_id = $1 AND receiver_id = $2) OR (sender_id = $2 AND receiver_id = $1) ORDER BY sent_at ASC", user1, user2).fetch_all(db).await {
-            Ok(rows) => Ok(rows.iter().filter_map(|row| {
+        sqlx::query!("SELECT * FROM messages WHERE (sender_id = $1 AND receiver_id = $2) OR (sender_id = $2 AND receiver_id = $1) ORDER BY sent_at ASC", user1, user2)
+            .fetch_all(db)
+        .await
+        .map(|rows| {
+            rows.iter().filter_map(|row| {
                 row.id.map(|id| Message::new(
                         id,
                         row.sender_id,
                         row.receiver_id,
                         &row.message_text,
                         row.sent_at.unwrap(),
-                    ))
-            }).collect()),
-            Err(e) => Err(e),
-        }
+
+                ))
+            }).collect()
+        })
     }
 
     pub async fn delete_from_sender_id_to_receiver_id(
@@ -166,26 +161,20 @@ impl Message {
         sender_id: i64,
         receiver_id: i64,
     ) -> Result<(), sqlx::Error> {
-        match sqlx::query!(
+        sqlx::query!(
             "DELETE FROM messages WHERE sender_id = ? AND receiver_id = ?",
             sender_id,
             receiver_id
         )
         .execute(db)
         .await
-        {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
+        .map(|_| ())
     }
 
     pub async fn delete_by_id(db: &SqlitePool, id: i64) -> Result<(), sqlx::Error> {
-        match sqlx::query!("DELETE FROM messages WHERE id = ?", id)
+        sqlx::query!("DELETE FROM messages WHERE id = ?", id)
             .execute(db)
             .await
-        {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
-        }
+            .map(|_| ())
     }
 }
